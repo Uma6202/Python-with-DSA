@@ -1,88 +1,78 @@
 class Node:
-    """A node in a singly linked list."""
     def __init__(self, data):
         self.data = data
         self.next = None
 
-class SinglyLinkedList:
-    """A singly linked list."""
+class LinkedList:
     def __init__(self):
         self.head = None
 
-    def insert_at_beginning(self, data):
-        """Insert a new node at the beginning of the list."""
+    # Creation of linked list
+    def create(self, data):
         new_node = Node(data)
-        new_node.next = self.head
-        self.head = new_node
-
-    def insert_at_end(self, data):
-        """Insert a new node at the end of the list."""
-        new_node = Node(data)
-        if not self.head:
+        if self.head is None:
             self.head = new_node
-            return
-        last_node = self.head
-        while last_node.next:
-            last_node = last_node.next
-        last_node.next = new_node
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = new_node
 
-    def delete_node(self, key):
-        """Delete the first occurrence of a node with the given key."""
+    # Insertion at the end
+    def insert(self, data):
+        self.create(data)
+
+    # Deletion of a node by value
+    def delete(self, key):
         current = self.head
+        previous = None
 
-        # If the node to be deleted is the head node
-        if current and current.data == key:
-            self.head = current.next
-            current = None
-            return
-
-        # Search for the key to be deleted
-        prev = None
         while current and current.data != key:
-            prev = current
+            previous = current
             current = current.next
 
-        # If the key was not found
-        if not current:
-            print("Node with data", key, "not found.")
+        if current is None:  # Key not found
+            print("Value not found in the list.")
             return
 
-        # Unlink the node
-        prev.next = current.next
-        current = None
+        if previous is None:  # The node to be deleted is the head
+            self.head = current.next
+        else:
+            previous.next = current.next
 
-    def search(self, key):
-        """Search for a node with the given key."""
-        current = self.head
-        while current:
-            if current.data == key:
-                return True
-            current = current.next
-        return False
-
+    # Display the linked list
     def display(self):
-        """Display the linked list."""
         current = self.head
-        if not current:
-            print("List is empty.")
+        if current is None:
+            print("The list is empty.")
             return
+        
         while current:
-            print(current.data, end=' -> ')
+            print(current.data, end=" -> ")
             current = current.next
         print("None")
 
 # Example usage
 if __name__ == "__main__":
-    linked_list = SinglyLinkedList()
-    linked_list.insert_at_end(10)
-    linked_list.insert_at_end(20)
-    linked_list.insert_at_beginning(5)
-    linked_list.display()  # Output: 5 -> 10 -> 20 -> None
+    ll = LinkedList()
+    
+    # Creation of linked list
+    ll.create(1)
+    ll.create(2)
+    ll.create(3)
 
-    linked_list.delete_node(10)
-    linked_list.display()  # Output: 5 -> 20 -> None
+    print("Initial Linked List:")
+    ll.display()
 
-    found = linked_list.search(20)
-    print("Node found:", found)  # Output: Node found: True
+    # Insertion of new element
+    ll.insert(4)
+    print("After inserting 4:")
+    ll.display()
 
-    linked_list.display()  # Output: 5 -> 20 -> None
+    # Deletion of an element
+    ll.delete(2)
+    print("After deleting 2:")
+    ll.display()
+
+    # Attempt to delete a non-existent element
+    ll.delete(5)
